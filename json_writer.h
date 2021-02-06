@@ -6,13 +6,11 @@
 #ifndef __JSON_WRITER_H
 #define __JSON_WRITER_H
 
-//#include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-
-//DEFINE_SYSTEM_ALLOC(JsonWriter);
+#include <assert.h>
 
 // json types
 #define JSON_TYPE_NULL 0
@@ -92,7 +90,7 @@ public:
 	// allocate string
 	char* AllocString(size_t size)
 	{
-		Assert(size > 0);
+		assert(size > 0);
 		
 		return (char*)m_Alloc.Alloc(size);
 	}
@@ -214,7 +212,7 @@ public:
 	// allocate string
 	char* AllocString(size_t size)
 	{
-		Assert(size > 0);
+		assert(size > 0);
 
 		if (size > STRING_SIZE)
 		{
@@ -267,13 +265,13 @@ public:
 	// free json node
 	void FreeNode(json_node_t* pNode)
 	{
-		Assert(pNode != NULL);
+		assert(pNode != NULL);
 	}
 
 	// free string
 	void FreeString(char* str)
 	{
-		Assert(str != NULL);
+		assert(str != NULL);
 
 		if ((strlen(str) + 1) > STRING_SIZE)
 		{
@@ -308,8 +306,8 @@ private:
 public:
 	TJsonOutput(char* pdata, size_t len)
 	{
-		Assert(pdata != NULL);
-		Assert(len > 0);
+		assert(pdata != NULL);
+		assert(len > 0);
 
 		m_pOriginData = pdata;
 		m_pData = pdata;
@@ -408,7 +406,7 @@ public:
 	// new null node
 	json_node_t* NewNull(const char* key)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -424,7 +422,7 @@ public:
 	// new boolean node
 	json_node_t* NewBoolean(const char* key, bool value)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -448,7 +446,7 @@ public:
 	// new integer node
 	json_node_t* NewInt32(const char* key, int value)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -464,7 +462,7 @@ public:
 	// new double node
 	json_node_t* NewDouble(const char* key, double value)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -480,8 +478,8 @@ public:
 	// new string node
 	json_node_t* NewString(const char* key, const char* value)
 	{
-		Assert(key != NULL);
-		Assert(value != NULL);
+		assert(key != NULL);
+		assert(value != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -499,7 +497,7 @@ public:
 	// new array node
 	json_node_t* NewArray(const char* key)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -515,7 +513,7 @@ public:
 	// new object node
 	json_node_t* NewObject(const char* key)
 	{
-		Assert(key != NULL);
+		assert(key != NULL);
 
 		json_node_t* pNode = m_Buffer.AllocNode();
 		size_t key_size = strlen(key) + 1;
@@ -531,7 +529,7 @@ public:
 	// create root node
 	json_node_t* CreateRoot()
 	{
-		Assert(NULL == m_pRoot);
+		assert(NULL == m_pRoot);
 
 		m_pRoot = this->NewObject("");
 		return m_pRoot;
@@ -540,11 +538,11 @@ public:
 	// add first child node
 	json_node_t* AddFirstChild(json_node_t* pParent, json_node_t* pNode)
 	{
-		Assert(pParent != NULL);
-		Assert(pNode != NULL);
-		Assert((pParent->nType == JSON_TYPE_ARRAY) ||
+		assert(pParent != NULL);
+		assert(pNode != NULL);
+		assert((pParent->nType == JSON_TYPE_ARRAY) ||
 			(pParent->nType == JSON_TYPE_OBJECT));
-		Assert(pParent->pChild == NULL);
+		assert(pParent->pChild == NULL);
 
 		pParent->pChild = pNode;
 		return pNode;
@@ -553,10 +551,10 @@ public:
 	// add to next node
 	json_node_t* AddSibling(json_node_t* pPrev, json_node_t* pNode)
 	{
-		Assert(pPrev != NULL);
-		Assert(pNode != NULL);
-		Assert(pPrev != m_pRoot);
-		Assert(pPrev->pNext == NULL);
+		assert(pPrev != NULL);
+		assert(pNode != NULL);
+		assert(pPrev != m_pRoot);
+		assert(pPrev->pNext == NULL);
 
 		pPrev->pNext = pNode;
 		return pNode;
@@ -565,7 +563,7 @@ public:
 	// write to stream
 	bool Write(TJsonOutput<ALLOC>* pOut, bool formatted)
 	{
-		Assert(pOut != NULL);
+		assert(pOut != NULL);
 
 		if (NULL == m_pRoot)
 		{
@@ -585,7 +583,7 @@ private:
 	// delete json node
 	void DeleteNode(json_node_t* pNode)
 	{
-		Assert(pNode != NULL);
+		assert(pNode != NULL);
 
 		if (pNode->szKey)
 		{
@@ -620,8 +618,8 @@ private:
 	// write string
 	void WriteString(TJsonOutput<ALLOC>* pOut, const char* str, size_t len)
 	{
-		Assert(pOut != NULL);
-		Assert(str != NULL);
+		assert(pOut != NULL);
+		assert(str != NULL);
 		
 		for (size_t i = 0; i < len; ++i)
 		{
@@ -644,8 +642,8 @@ private:
 	// write json key
 	void WriteKey(TJsonOutput<ALLOC>* pOut, bool formatted, json_node_t* pNode)
 	{
-		Assert(pOut != NULL);
-		Assert(pNode != NULL);
+		assert(pOut != NULL);
+		assert(pNode != NULL);
 		
 		pOut->Write("\"", 1);
 		this->WriteString(pOut, pNode->szKey, strlen(pNode->szKey));
@@ -664,9 +662,9 @@ private:
 	void WriteNode(TJsonOutput<ALLOC>* pOut, bool formatted, 
 		json_node_t* pNode,  int* pTabCount, bool is_array)
 	{
-		Assert(pOut != NULL);
-		Assert(pNode != NULL);
-		Assert(pTabCount != NULL);
+		assert(pOut != NULL);
+		assert(pNode != NULL);
+		assert(pTabCount != NULL);
 
 		if (formatted)
 		{
@@ -846,7 +844,7 @@ private:
 			break;
 		}
 		default:
-			Assert(0);
+			assert(0);
 			break;
 		}
 
