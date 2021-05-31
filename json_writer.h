@@ -627,6 +627,16 @@ private:
 
 			if ((ch < 32) || (ch > 126))
 			{
+				static char s_hex_to_char[16] = {
+					'0', '1', '2', '3', '4', '5', '6', '7',
+					'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+				char data[4];
+
+				data[0] = '\\';
+				data[1] = 'x';
+				data[2] = s_hex_to_char[(ch >> 4) & 0xF];
+				data[3] = s_hex_to_char[ch & 0xF];
+				pOut->Write(data, 4);
 				continue;
 			}
 
