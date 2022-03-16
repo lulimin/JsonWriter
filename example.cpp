@@ -5,7 +5,7 @@ typedef TJsonWriter<JsonWriterAlloc,
 
 static void test_json_writer()
 {
-	//TJsonWriter<> jw;
+	///TJsonWriter<> jw;
 	json_writer_t jw;
 	char buffer[1024];
 	TJsonOutput<> jo(buffer, sizeof(buffer));
