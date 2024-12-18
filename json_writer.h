@@ -625,18 +625,29 @@ private:
 		{
 			unsigned int ch = (unsigned char)str[i];
 
-			if ((ch < 32) || (ch > 126))
+			if ((ch < 0x20) || (ch == 0x7F))
 			{
-				static char s_hex_to_char[16] = {
-					'0', '1', '2', '3', '4', '5', '6', '7',
-					'8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-				char data[4];
-
-				data[0] = '\\';
-				data[1] = 'x';
-				data[2] = s_hex_to_char[(ch >> 4) & 0xF];
-				data[3] = s_hex_to_char[ch & 0xF];
-				pOut->Write(data, 4);
+				switch (ch)
+				{
+				case '\t':
+					pOut->Write("\\t", 2);
+					break;
+				case '\n':
+					pOut->Write("\\n", 2);
+					break;
+				case '\r':
+					pOut->Write("\\r", 2);
+					break;
+				case '\f':
+					pOut->Write("\\f", 2);
+					break;
+				case '\b':
+					pOut->Write("\\b", 2);
+					break;
+				default:
+					break;
+				}
+				
 				continue;
 			}
 
